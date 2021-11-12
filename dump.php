@@ -120,7 +120,7 @@ foreach ($rows as $row) {
   } else {
     unset($row['cameras']);
 
-    for ($i = 0; $i < 5; $i++) {
+    for ($i = 0; $i < 6; $i++) {
       // 6 Is the number of camera attributes. This is so that phones without a camera don't have missing columns
       $row[] = '';
     }
