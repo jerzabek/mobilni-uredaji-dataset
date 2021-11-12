@@ -26,31 +26,59 @@ Unutar repozitorija se također nalaze CSV i JSON datoteke koje predstavljaju tr
 
 Skripta `dump.php` generira CSV te JSON reprezentaciju podataka u bazi. U slučaju mijenjanja strukture baze podataka obavezna je provjera valjanosti skripte.
 
-## Opis podataka u skupu
-Atributi skupa:
+## Opis atributa u skupu
 
-* name - Naziv mobilnog uređaja
-* release_date - Datum izlaska uređaja na tržište (format yyyy-mm-dd)
-* brand - Naziv tvrtke
-* processor - Podaci o procesoru uređaja
-  * name - Naziv procesora
-  * cores - Broj fizičkih jezgri procesora
-  * clock_speed - Brzina procesora u GHz (gigahertz)
-  * brand - Proizvođač procesora
-* width - Širina uređaja u milimetrima
-* height - Visina uređaja u milimetrima
-* thickness - Debljina uređaja u milimetrima
-* screen_size - Veličina ekrana u inchevima
-* vertical_resolution - Vertikalna rezolucija ekrana u pikselima
-* horizontal_resolution - Horizontalna rezolucija ekrana u pikselima
-* charging_port - Tip priključka za punjenje
-* headphone_jack - Postoji li prikjučak za 3.5mm audio
-* microsd - Postoji li utor za dodatnu pohranu
-* wireless_charging - Postoji li mogućnost za bežićno punjenje
-* cameras - Opis kamera na uređaju, ako one postoje
-    * description - Kratak opis kamere
-    * horizontal_resolution - Horizontalna rezolucija ekrana u pikselima
-    * vertical_resolution - Vertikalna rezolucija ekrana u pikselima
-    * resolution - Rezolucija kamere u megapikselima
-    * apature - Otvorenost kamere
-    * position - Lokacija kamere na uređaju
+### Mobitel
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| name | Naziv mobilnog uređaja| Tekst (200 znakova) |
+| release_date | Datum izlaska uređaja na tržište | Datum (format yyyy-mm-dd) |
+| width | Širina uređaja u milimetrima | Decimalni broj |
+| height | Visina uređaja u milimetrima | Decimalni broj |
+| thickness | Debljina uređaja u milimetrima | Decimalni broj |
+| screen_size | Veličina ekrana u inchevima | Decimalni broj |
+| vertical_resolution | Vertikalna rezolucija ekrana u pikselima | Broj |
+| horizontal_resolution | Horizontalna rezolucija ekrana u pikselima | Broj |
+| charging_port | Poveznica na tip utora | ID |
+| headphone_jack | Postoji li prikjučak za 3.5mm audio | Boolean |
+| microsd | Postoji li utor za dodatnu pohranu | Boolean |
+| wireless_charging | Postoji li mogućnost za bežićno punjenje | Boolean |
+
+### Tvrtka
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| brand | Naziv tvrtke | Tekst (200 znakova) |
+
+### Procesor
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| name | Naziv procesora | Tekst (200 znakova) |
+| cores | Broj fizičkih jezgri procesora | Broj (< 127) |
+| clock_speed | Brzina procesora u GHz (gigahertz) | Decimalni broj |
+| brand | Poveznica na tvrtku | ID |
+
+### Kamera
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| description | Kratak opis kamere | Tekst (100 znakova) |
+| horizontal_resolution | Horizontalna rezolucija ekrana u pikselima | Broj |
+| vertical_resolution | Vertikalna rezolucija ekrana u pikselima | Broj |
+| resolution | Rezolucija kamere u megapikselima | Broj |
+| apature | Otvorenost kamere | Tekst (100 znakova) |
+| position | Poveznica na lokaciju kamere na uređaju | ID |
+
+### Lokacija kamere na uređaju
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| position | Opis lokacije na uređaju | Tekst (200 znakova) |
+
+### Tip utora
+
+| Naziv | Opis | Tip podatka |
+| --- | --- | --- |
+| name | Tip utora | Tekst (200 znakova) |
