@@ -1,81 +1,70 @@
 <?php
+require_once(__DIR__ . '/constants.php');
+require_once(__DIR__ . '/database.php');
 
-// Database access configuration
-define('DB_NAME', 'fer_2122_or_mobilni_uredaji');
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+$db = new Database();
 
-try {
-  $db = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
-  // set the PDO error mode to exception
-  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed: " . $e->getMessage();
-  exit();
-}
-
-$sql = $db->query('SELECT * FROM phone');
-$rows = $sql->fetchAll(PDO::FETCH_ASSOC);
+$rows = $db->get('SELECT * FROM phone');
 
 // ---------------------------------- JSON ----------------------------------
 // Iterate over all phones and fill out necessary attributes
 foreach ($rows as $index => $row) {
   // Join brand
-  $sql = $db->prepare('SELECT * FROM company WHERE id = ?');
-  $sql->execute(array($row['brand']));
-  $brand = $sql->fetch(PDO::FETCH_ASSOC);
+  $brand = $db->getPrepared('SELECT * FROM company WHERE id = ?', array($row['brand']), false);
 
-  if ($brand !== false) {
-    $row['brand'] = $brand['name'];
-  } else {
-    throw new Error("Could not find brand");
+  if (empty($brand)) {
+    throw new Error('Brand not found');
   }
+
+  $row['brand'] = $brand['name'];
 
   // Join processor
-  $sql = $db->prepare('SELECT * FROM processor WHERE id = ?');
-  $sql->execute(array($row['processor']));
-  $processor = $sql->fetch(PDO::FETCH_ASSOC);
-  unset($processor['id']);
+  $processor = $db->getPrepared('SELECT * FROM processor WHERE id = ?', array($row['processor']), false);
 
-  if ($processor !== false) {
-    $sql = $db->prepare('SELECT * FROM company WHERE id = ?');
-    $sql->execute(array($processor['brand']));
-    $processor_brand = $sql->fetch(PDO::FETCH_ASSOC);
-
-    if ($processor !== false) {
-      $processor['brand'] = $processor_brand['name'];
-      $row['processor']   = $processor;
-    } else {
-      throw new Error("Could not find processor brand");
-    }
-  } else {
-    throw new Error("Could not find processor");
+  if (empty($processor)) {
+    throw new Error('Processor not found');
   }
+
+  unset($processor['id']); // We do not wish to include internal database IDs in the generated dataset
+
+  $processor_brand = $db->getPrepared('SELECT * FROM company WHERE id = ?', array($processor['brand']), false);
+
+  if (empty($processor_brand)) {
+    throw new Error('Processor brand not found');
+  }
+
+  $processor['brand'] = $processor_brand['name'];
+  $row['processor']   = $processor;
 
   // Join charging port
-  $sql = $db->prepare('SELECT * FROM charging_port WHERE id = ?');
-  $sql->execute(array($row['charging_port']));
-  $charging_port = $sql->fetch(PDO::FETCH_ASSOC);
+  $charging_port = $db->getPrepared('SELECT * FROM charging_port WHERE id = ?', array($row['charging_port']), false);
 
-  if ($charging_port !== false) {
-    $row['charging_port'] = $charging_port['name'];
-  } else {
-    throw new Error("Could not find charging_port");
+  if (empty($charging_port)) {
+    throw new Error('Charging port not found');
   }
 
+  $row['charging_port'] = $charging_port['name'];
+
+  // We ensure boolean type
   $row['headphone_jack']    = $row['headphone_jack'] ? true : false;
   $row['microsd']           = $row['microsd'] ? true : false;
   $row['wireless_charging'] = $row['wireless_charging'] ? true : false;
 
   // Camera data
-  $sql = $db->prepare('SELECT camera.description, camera.horizontal_resolution, camera.vertical_resolution, camera.resolution, camera.apature, camera_position.position FROM phone_camera LEFT JOIN camera ON phone_camera.camera_id = camera.id LEFT JOIN phone ON phone_camera.phone_id = phone.id LEFT JOIN camera_position ON camera.position = camera_position.id WHERE phone_id = ?');
-  $sql->execute(array($row['id']));
-  $phone_cameras = $sql->fetchAll(PDO::FETCH_ASSOC);
+  $phone_cameras = $db->getPrepared(
+    'SELECT camera.description, camera.horizontal_resolution, camera.vertical_resolution, camera.resolution, camera.apature, camera_position.position 
+    FROM phone_camera 
+    LEFT JOIN camera ON phone_camera.camera_id = camera.id 
+    LEFT JOIN phone ON phone_camera.phone_id = phone.id 
+    LEFT JOIN camera_position ON camera.position = camera_position.id 
+    WHERE phone_id = ?',
+    array($row['id'])
+  );
 
   $row['cameras'] = $phone_cameras;
 
   unset($row['id']);
+
   $rows[$index] = $row;
 }
 
