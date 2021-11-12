@@ -45,7 +45,7 @@ foreach ($rows as $index => $row) {
 
     if ($processor !== false) {
       $processor['brand'] = $processor_brand['name'];
-      $row['processor'] = $processor;
+      $row['processor']   = $processor;
     } else {
       throw new Error("Could not find processor brand");
     }
@@ -64,8 +64,8 @@ foreach ($rows as $index => $row) {
     throw new Error("Could not find charging_port");
   }
 
-  $row['headphone_jack'] = $row['headphone_jack'] ? true : false;
-  $row['microsd'] = $row['microsd'] ? true : false;
+  $row['headphone_jack']    = $row['headphone_jack'] ? true : false;
+  $row['microsd']           = $row['microsd'] ? true : false;
   $row['wireless_charging'] = $row['wireless_charging'] ? true : false;
 
   // Camera data
@@ -79,7 +79,7 @@ foreach ($rows as $index => $row) {
   $rows[$index] = $row;
 }
 
-file_put_contents(DB_NAME.".json", json_encode($rows));
+file_put_contents(DB_NAME . ".json", json_encode($rows));
 // ---------------------------------- END JSON ----------------------------------
 
 // ---------------------------------- CSV ----------------------------------
@@ -87,8 +87,8 @@ $csv_data = array();
 
 foreach ($rows as $row) {
   // Flatten processor array
-  $row['processor']['processor_name'] = $row['processor']['name'];
-  $row['processor']['processor_brand'] = $row['processor']['brand'];
+  $row['processor']['processor_name']   = $row['processor']['name'];
+  $row['processor']['processor_brand']  = $row['processor']['brand'];
 
   unset($row['processor']['name']);
   unset($row['processor']['brand']);
@@ -106,12 +106,25 @@ foreach ($rows as $row) {
 
       unset($csv_data[$last]['cameras']);
 
+      // Rename these attributes to prevent overwriting
+      $camera['camera_horizontal_resolution'] = $camera['horizontal_resolution'];
+      $camera['camera_vertical_resolution']   = $camera['vertical_resolution'];
+
+      unset($camera['horizontal_resolution']);
+      unset($camera['vertical_resolution']);
+
       $csv_data[$last] = array_merge($csv_data[$last], $camera);
 
       unset($csv_data[$last]['processor']);
     }
   } else {
     unset($row['cameras']);
+
+    for ($i = 0; $i < 5; $i++) {
+      // 6 Is the number of camera attributes. This is so that phones without a camera don't have missing columns
+      $row[] = '';
+    }
+
     $csv_data[] = $row;
   }
 }
@@ -119,7 +132,7 @@ foreach ($rows as $row) {
 // Add column titels
 array_unshift($csv_data, array_keys($csv_data[0]));
 
-$fp = fopen(DB_NAME.'.csv', 'w');
+$fp = fopen(DB_NAME . '.csv', 'w');
 
 if ($fp !== false) {
   foreach ($csv_data as $fields) {
