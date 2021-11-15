@@ -24,12 +24,18 @@ class Database
    * Executes the given query on the database and returns the result.
    * 
    * @param String $query The SQL query to be executed
+   * @param Boolean $multiple Whether to return multiple results or a single row. Default: true
    * @return Array Data returned by given query
    */
-  function get($query)
+  function get($query, $multiple = true)
   {
     $sql    = $this->db->query($query);
-    $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($multiple) {
+      $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $result = $sql->fetch(PDO::FETCH_ASSOC);
+    }
 
     if ($result === false) {
       throw new Error("MySQL Error");
@@ -63,5 +69,22 @@ class Database
     }
 
     return $result;
+  }
+
+  /**
+   * We handle error responses in this function.
+   * 
+   * @param int $status The status code returned to the client
+   * @param String $msg The error message outputed in JSON format
+   */
+  function handle_error($status, $msg = "Unknown error occurred")
+  {
+    echo json_encode(array(
+      "status"  => false,
+      "message" => $msg
+    ));
+
+    http_response_code($status);
+    exit();
   }
 }

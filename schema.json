@@ -1,0 +1,359 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://or.jarza.cc/fer_2122_or_mobilni_uredaji.json",
+  "type": "array",
+  "title": "Mobilni uređaji dataset",
+  "description": "FER 2122 Otvoreno računarstvo mobilni uređaji dataset",
+  "items": {
+    "type": "object",
+    "title": "Mobile phone",
+    "description": "Mobile phone in the dataset.",
+    "required": [
+      "name",
+      "release_date",
+      "brand",
+      "processor",
+      "width",
+      "height",
+      "thickness",
+      "screen_size",
+      "vertical_resolution",
+      "horizontal_resolution",
+      "charging_port",
+      "headphone_jack",
+      "microsd",
+      "wireless_charging",
+      "cameras"
+    ],
+    "properties": {
+      "name": {
+        "$id": "#/properties/name",
+        "type": "string",
+        "title": "The name schema",
+        "description": "Name of the phone.",
+        "examples": [
+          "Galaxy A40"
+        ]
+      },
+      "release_date": {
+        "$id": "#/properties/release_date",
+        "type": "string",
+        "title": "The release_date schema",
+        "description": "The release date of the phone.",
+        "examples": [
+          "2019-04-01"
+        ]
+      },
+      "brand": {
+        "$id": "#/properties/brand",
+        "type": "string",
+        "title": "The brand schema",
+        "description": "Brand name of the phone manufacturer.",
+        "examples": [
+          "Samsung"
+        ]
+      },
+      "processor": {
+        "$id": "#/properties/processor",
+        "type": "object",
+        "title": "The processor schema",
+        "description": "Processor details.",
+        "default": {},
+        "examples": [
+          {
+            "name": "Samsung Exynos 7885",
+            "cores": 8,
+            "clock_speed": 1.8,
+            "brand": "Samsung"
+          }
+        ],
+        "required": [
+          "name",
+          "cores",
+          "clock_speed",
+          "brand"
+        ],
+        "properties": {
+          "name": {
+            "$id": "#/properties/processor/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "Name of the processor.",
+            "default": "",
+            "examples": [
+              "Samsung Exynos 7885"
+            ]
+          },
+          "cores": {
+            "$id": "#/properties/processor/properties/cores",
+            "type": "integer",
+            "title": "The cores schema",
+            "description": "Number of physical cores. Does not take into account different types of cores.",
+            "default": 0,
+            "examples": [
+              8
+            ]
+          },
+          "clock_speed": {
+            "$id": "#/properties/processor/properties/clock_speed",
+            "type": [
+              "number",
+              "null"
+            ],
+            "title": "The clock_speed schema",
+            "description": "Clock speed of the processor in gigahertz.",
+            "default": 0.0,
+            "examples": [
+              1.8
+            ]
+          },
+          "brand": {
+            "$id": "#/properties/processor/properties/brand",
+            "type": "string",
+            "title": "The brand schema",
+            "description": "Brand name of the processor manufacturer.",
+            "default": "",
+            "examples": [
+              "Samsung"
+            ]
+          }
+        }
+      },
+      "width": {
+        "$id": "#/properties/width",
+        "type": "number",
+        "title": "The width schema",
+        "description": "Phone width in milimeters.",
+        "default": 0.0,
+        "examples": [
+          144.3
+        ]
+      },
+      "height": {
+        "$id": "#/properties/height",
+        "type": "number",
+        "title": "The height schema",
+        "description": "Phone height in milimeters.",
+        "default": 0.0,
+        "examples": [
+          69.1
+        ]
+      },
+      "thickness": {
+        "$id": "#/properties/thickness",
+        "type": "number",
+        "title": "The thickness schema",
+        "description": "Phone thickness in milimeters.",
+        "default": 0.0,
+        "examples": [
+          7.9
+        ]
+      },
+      "screen_size": {
+        "$id": "#/properties/screen_size",
+        "type": "number",
+        "title": "The screen_size schema",
+        "description": "The diagonal dimension of the screen in inches.",
+        "default": 0.0,
+        "examples": [
+          5.9
+        ]
+      },
+      "vertical_resolution": {
+        "$id": "#/properties/vertical_resolution",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "title": "The vertical_resolution schema",
+        "description": "Vertical resolution of the screen in pixels.",
+        "default": 0,
+        "examples": [
+          2280
+        ]
+      },
+      "horizontal_resolution": {
+        "$id": "#/properties/horizontal_resolution",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "title": "The horizontal_resolution schema",
+        "description": "Horizontal resolution of the screen in pixels.",
+        "default": 0,
+        "examples": [
+          1080
+        ]
+      },
+      "charging_port": {
+        "$id": "#/properties/charging_port",
+        "type": "string",
+        "title": "The charging_port schema",
+        "description": "The name of the charging port.",
+        "default": "",
+        "examples": [
+          "USB-C"
+        ]
+      },
+      "headphone_jack": {
+        "$id": "#/properties/headphone_jack",
+        "type": "boolean",
+        "title": "The headphone_jack schema",
+        "description": "Does the phone have a 3.5mm auxiliary jack.",
+        "default": false,
+        "examples": [
+          true
+        ]
+      },
+      "microsd": {
+        "$id": "#/properties/microsd",
+        "type": "boolean",
+        "title": "The microsd schema",
+        "description": "Does the phone have expandable storage in the form of a microsd slot.",
+        "default": false,
+        "examples": [
+          true
+        ]
+      },
+      "wireless_charging": {
+        "$id": "#/properties/wireless_charging",
+        "type": "boolean",
+        "title": "The wireless_charging schema",
+        "description": "Does the phone have wireless charging capabilities.",
+        "default": false,
+        "examples": [
+          false
+        ]
+      },
+      "cameras": {
+        "$id": "#/properties/cameras",
+        "type": "array",
+        "title": "The cameras schema",
+        "description": "Properties of the cameras on the phone",
+        "default": [],
+        "examples": [
+          [
+            {
+              "description": "Main standard camera",
+              "horizontal_resolution": null,
+              "vertical_resolution": null,
+              "resolution": 16,
+              "apature": "f/1.7",
+              "position": "back"
+            },
+            {
+              "description": "Selfie camera",
+              "horizontal_resolution": null,
+              "vertical_resolution": null,
+              "resolution": 25,
+              "apature": "f/2.0",
+              "position": "front"
+            }
+          ]
+        ],
+        "additionalItems": true,
+        "items": {
+          "$id": "#/properties/cameras/items",
+          "anyOf": [
+            {
+              "$id": "#/properties/cameras/items/anyOf/0",
+              "type": "object",
+              "title": "The camera schema",
+              "description": "A single camera",
+              "default": {},
+              "examples": [
+                {
+                  "description": "Main standard camera",
+                  "horizontal_resolution": null,
+                  "vertical_resolution": null,
+                  "resolution": 16,
+                  "apature": "f/1.7",
+                  "position": "back"
+                }
+              ],
+              "required": [
+                "description",
+                "horizontal_resolution",
+                "vertical_resolution",
+                "resolution",
+                "apature",
+                "position"
+              ],
+              "properties": {
+                "description": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/description",
+                  "type": "string",
+                  "title": "The description schema",
+                  "description": "Camera description.",
+                  "default": "",
+                  "examples": [
+                    "Main standard camera"
+                  ]
+                },
+                "horizontal_resolution": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/horizontal_resolution",
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "title": "The horizontal_resolution schema",
+                  "description": "Horizontal resolution of the camera sensor in pixels.",
+                  "default": null,
+                  "examples": [
+                    null
+                  ]
+                },
+                "vertical_resolution": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/vertical_resolution",
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "title": "The vertical_resolution schema",
+                  "description": "Vertical resolution of the camera sensor in pixels.",
+                  "default": null,
+                  "examples": [
+                    null
+                  ]
+                },
+                "resolution": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/resolution",
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "title": "The resolution schema",
+                  "description": "Resolution of the camera described in megapixels.",
+                  "default": 0,
+                  "examples": [
+                    16
+                  ]
+                },
+                "apature": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/apature",
+                  "type": "string",
+                  "title": "The apature schema",
+                  "description": "Camera apature.",
+                  "default": "",
+                  "examples": [
+                    "f/1.7"
+                  ]
+                },
+                "position": {
+                  "$id": "#/properties/cameras/items/anyOf/0/properties/position",
+                  "type": "string",
+                  "title": "The position schema",
+                  "description": "Describes the position of the camera",
+                  "default": "",
+                  "examples": [
+                    "back"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
