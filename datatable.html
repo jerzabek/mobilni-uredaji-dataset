@@ -176,6 +176,15 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-12 mb-4">
+          <p>Preuzmi:
+            <button onclick="downloadObjectAsJson(currentJSON, 'fer_2122_or_mobilni_uredaji')"
+              class="btn btn-success"><i class="bi bi-cloud-arrow-down"></i> JSON</button>
+            <button onclick="downloadCSV('fer_2122_or_mobilni_uredaji')" class="btn btn-success"><i
+                class="bi bi-cloud-arrow-down"></i> CSV</button>
+          </p>
+        </div>
+
         <div class="col-12 table-responsive">
           <table id="data" class="table table-striped table-hover" style="width:100%">
             <thead>
@@ -548,6 +557,99 @@
         $("#global_filter button").prop('disabled', false);
       });
     });
+
+    /* Download JSON data */
+    function downloadObjectAsJson(exportObj, exportName) {
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", exportName + ".json");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    }
+
+    /* Download CSV data */
+    function downloadCSV(exportName) {
+      let csvData = [];
+
+      currentJSON.forEach(row => {
+        let temp = { ...row };
+
+        // Prevent key name collisions
+        temp.processor.processor_name = temp.processor.name;
+        temp.processor.processor_brand = temp.processor.brand;
+        delete temp.processor.name;
+        delete temp.processor.brand;
+        temp = { ...temp, ...temp.processor };
+        delete temp.processor;
+
+        if (temp.cameras == null || temp.cameras.length == 0) {
+          temp = { ...temp, ...temp.cameras };
+          delete temp.cameras;
+
+          csvData.push({
+            ...temp,
+            apature: '',
+            description: '',
+            position: '',
+            resolution: '',
+            camera_horizontal_resolution: '',
+            camera_vertical_resolution: ''
+          });
+          return;
+        }
+
+        let tempCameras = [];
+
+        temp.cameras.forEach(camera => {
+          tempCameras.push({
+            ...temp,
+            apature: camera.apature,
+            description: camera.description,
+            position: camera.position,
+            resolution: camera.resolution,
+            camera_horizontal_resolution: camera.horizontal_resolution,
+            camera_vertical_resolution: camera.vertical_resolution,
+          });
+        });
+
+        tempCameras.forEach(t => {
+          delete t.cameras;
+          csvData.push(t);
+        });
+      });
+
+      if (csvData.length > 1) {
+        csvData.unshift(Object.keys(csvData[0]));
+      }
+
+      var dataStr = "data:text/csv;charset=utf-8," + ConvertToCSV(csvData);
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", exportName + ".csv");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    }
+
+    function ConvertToCSV(objArray) {
+      var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+      var str = '';
+
+      for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+          if (line != '') line += ','
+
+          line += array[i][index];
+        }
+
+        str += line + '\r\n';
+      }
+
+      return str;
+    }
   </script>
 </body>
 
