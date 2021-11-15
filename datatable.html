@@ -30,6 +30,12 @@
 
   <script src="/assets/js/jquery-3.6.0.min.js"></script>
 
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     .search-type-text,
     .search-type-number,
@@ -37,6 +43,10 @@
     .search-type-boolean,
     .search-type-select {
       display: none;
+    }
+
+    #data tbody tr {
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -69,7 +79,7 @@
           <form id="global_filter" action="/api/filter.php" method="get">
             <div class="row mb-4">
               <div class="col-12 col-md-10 col-lg-8 mb-2 mb-md-0">
-                <input type="text" class="form-control" name="search" placeholder="Pretraži sva polja">
+                <input type="text" class="form-control" name="wildcard" placeholder="Pretraži sva polja">
               </div>
               <div class="col-12 col-md-2">
                 <button class="btn btn-success"><i class="bi bi-search"></i> Traži</button>
@@ -117,7 +127,7 @@
             <div class="row search-type-text">
               <div class="col-12 col-md-6 col-lg-4">
                 <label for="value">Traži:</label>
-                <input type="text" class="form-control" name="value" disabled>
+                <input type="text" class="form-control" name="value" required disabled>
               </div>
             </div>
 
@@ -147,7 +157,7 @@
 
             <div class="row search-type-select">
               <div class="col-12 col-md-6 col-lg-4">
-                <select class="form-select" name="value" disabled>
+                <select class="form-select" name="value" required disabled>
                   <option selected>Odaberi...</option>
                 </select>
               </div>
@@ -155,20 +165,68 @@
 
             <div class="row search-type-boolean">
               <div class="col-12 col-md-6 col-lg-4">
-                <input type="radio" id="yes" name="value" value="yes" disabled>
+                <input type="radio" id="yes" name="value" value="1" required disabled>
                 <label for="yes">Da</label>
 
-                <input type="radio" id="no" name="value" value="no" disabled>
+                <input type="radio" id="no" name="value" value="0" disabled>
                 <label for="no">Ne</label>
               </div>
             </div>
           </form>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12 table-responsive">
+          <table id="data" class="table table-striped table-hover" style="width:100%">
+            <thead>
+              <tr>
+                <th>Tvrtka</th>
+                <th>Nazov</th>
+                <th>Izašao</th>
+                <th>Tip utora</th>
+                <th>Rezolucija</th>
+                <th>Vertikalna rezolucija</th>
+                <th>Horizontalna rezolucija</th>
+                <th>Širina</th>
+                <th>Visina</th>
+                <th>Debljina</th>
+                <th>3.5mm Aux utor</th>
+                <th>MicroSD utor</th>
+                <th>Bežično punjenje</th>
+                <th>Procesor</th>
+                <th>Kamere</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Tvrtka</th>
+                <th>Nazov</th>
+                <th>Izašao</th>
+                <th>Tip utora</th>
+                <th>Rezolucija</th>
+                <th>Vertikalna rezolucija</th>
+                <th>Horizontalna rezolucija</th>
+                <th>Širina</th>
+                <th>Visina</th>
+                <th>Debljina</th>
+                <th>3.5mm Aux utor</th>
+                <th>MicroSD utor</th>
+                <th>Bežično punjenje</th>
+                <th>Procesor</th>
+                <th>Kamere</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 
   <script>
+    var currentJSON;
+
     /* Date picker setup */
     let locale = {
       days: ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'],
@@ -187,26 +245,155 @@
     var afterDatePicker = new AirDatepicker('input[name="after"]', { locale });
 
     /* This datepicker implementation does not listen to input field changes when someone manually types in a date */
-    $("input[name='before']").on('change', function() {
+    $("input[name='before']").on('change', function () {
       var st = $(this).val();
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-      var dt = new Date(st.replace(pattern,'$3-$2-$1'));
+      var dt = new Date(st.replace(pattern, '$3-$2-$1'));
 
       beforeDatePicker.selectDate(dt);
     });
-    
-    $("input[name='after']").on('change', function() {
+
+    $("input[name='after']").on('change', function () {
       var st = $(this).val();
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-      var dt = new Date(st.replace(pattern,'$3-$2-$1'));
+      var dt = new Date(st.replace(pattern, '$3-$2-$1'));
 
       afterDatePicker.selectDate(dt);
     });
 
+    var datatable;
+
+    function renderCameras(json) {
+      json = JSON.parse(unescape(json));
+
+      let html = $("<ul></ul>")
+
+      json.forEach(camera => {
+        let subHtml = $("<ul class='list-unstyled'></ul>");
+
+        subHtml.append($('<li></li>').text('Opis: ' + camera.description));
+        subHtml.append($('<li></li>').text('Lokacija: ' + camera.position));
+        subHtml.append($('<li></li>').text('Rezolucija (megapixels): ' + camera.resolution));
+        subHtml.append($('<li></li>').text('Vertikalna rezolucija: ' + camera.vertical_resolution));
+        subHtml.append($('<li></li>').text('Horizontalna rezolucija: ' + camera.horizontal_resolution));
+
+        html.append(subHtml);
+        html.append($("<hr>"));
+      });
+
+      Swal.fire({
+        title: 'Kamere na uređaju',
+        icon: 'info',
+        html
+      });
+    }
+
+    function renderProcessor(json) {
+      json = JSON.parse(unescape(json));
+
+      let html = $("<ul class='list-unstyled'></ul>")
+
+      html.append($('<li></li>').text('Naziv: ' + json.name));
+      html.append($('<li></li>').text('Proizvođač: ' + json.brand));
+      html.append($('<li></li>').text('Broj jezrgi: ' + json.cores));
+      html.append($('<li></li>').text('Brzina (gigahertz): ' + json.clock_speed));
+
+      Swal.fire({
+        title: 'Procesor',
+        icon: 'info',
+        html
+      });
+    }
+
+    $(document).ready(function () {
+      // We immediatelly load up all data
+      $("#attribute_filter button").trigger('click');
+
+      /* Datatable setup */
+      datatable = $('#data').DataTable({
+        searching: false,
+        scrollX: true,
+        language: {
+          "decimal": ",",
+          "emptyTable": "Nema podataka",
+          "info": "Prikazujem red _START_ do _END_ od ukupno _TOTAL_ redova",
+          "infoEmpty": "Ukupno 0 redova",
+          "infoFiltered": "(filtrirano od _MAX_ ukupnih redova)",
+          "infoPostFix": "",
+          "thousands": ".",
+          "lengthMenu": "Prikaži _MENU_ redova",
+          "loadingRecords": "Učitavanje...",
+          "processing": "Procesiranje...",
+          "search": "Pretraga:",
+          "zeroRecords": "Nema traženih redova",
+          "paginate": {
+            "first": "Prva",
+            "last": "Zadnja",
+            "next": "Iduća",
+            "previous": "Prethodna"
+          },
+          "aria": {
+            "sortAscending": ": aktiviraj sortiranje stupca uzlazno",
+            "sortDescending": ": aktiviraj sortiranje stupca silazno"
+          }
+        },
+        columnDefs: [{
+          targets: [-1],
+          data: null,
+          render: function (data, type, row) {
+            let cameras = data[data.length - 1];
+            return "<button onclick='renderCameras(\"" + escape(JSON.stringify(cameras)) + "\")' class='btn, btn-primary btn-sm'>Detalji...</button>";
+          }
+        }, {
+          targets: [-2],
+          data: null,
+          render: function (data, type, row) {
+            let processor = data[data.length - 2];
+            return "<button onclick='renderProcessor(\"" + escape(JSON.stringify(processor)) + "\")' class='btn, btn-primary btn-sm'>Detalji...</button>";
+          }
+        }]
+      });
+    });
+
+    /* Generate table rows */
+    function populateTable(data) {
+      datatable.clear();
+
+      if (data.length == 0) {
+        datatable.draw(false);
+        return;
+      }
+
+      $.each(data, function (i, item) {
+        datatable.row.add([
+          item.brand,
+          item.name,
+          item.release_date,
+          item.charging_port,
+          item.screen_size,
+          item.vertical_resolution,
+          item.horizontal_resolution,
+          item.width,
+          item.height,
+          item.thickness,
+          item.headphone_jack,
+          item.microsd,
+          item.wireless_charging,
+          item.processor,
+          item.cameras
+        ]).draw(false);
+      });
+    }
+
+    function disabledFilters() {
+      $('.search-type-text, .search-type-number, .search-type-date, .search-type-boolean, .search-type-select').find('input, select').prop('disabled', true);
+      $('.search-type-text, .search-type-number, .search-type-date, .search-type-boolean, .search-type-select').hide();
+    }
+
     /* Choosing filter */
     function handleFilterChange() {
       // Reset input fields
-      $("input[name='value'], input[name='gt'], input[name='lt']").val('');
+      $("input[type='text'], input[type='number'], input[name='gt'], input[name='lt']").val('');
       $("input[type='radio']:checked").prop("checked", false);
 
       $(".search-type-unit").val('');
@@ -221,6 +408,7 @@
       var searchUnit = e.find(':selected').data('unit');
 
       if (searchType == undefined) {
+        disabledFilters();
         return;
       }
 
@@ -278,8 +466,7 @@
         select: '.search-type-select',
       }
 
-      $('.search-type-text, .search-type-number, .search-type-date, .search-type-boolean, .search-type-select').find('input, select').prop('disabled', true);
-      $('.search-type-text, .search-type-number, .search-type-date, .search-type-boolean, .search-type-select').hide();
+      disabledFilters();
 
       $(types[searchType]).find('input, select').prop('disabled', false);
       $(types[searchType]).css('display', 'flex'); // jQuery .show() sets display to block, but bootstrap 5 columns use flex
@@ -316,7 +503,7 @@
         url: '/api/filter.php',
         data: $(this).serializeArray(),
         beforeSend: function () {
-          console.log('loading...');
+          $("#attribute_filter button").prop('disabled', true);
         }
       }).done(function ({ status, data }) {
         if (status == false) {
@@ -324,10 +511,41 @@
           return;
         }
 
-        console.log(data)
+        currentJSON = data;
+
+        populateTable(data);
       }).fail(function (err) {
         console.error(err);
         alert('Dogodila se greška. Nije moguće filtrirati podatke.');
+      }).always(function () {
+        $("#attribute_filter button").prop('disabled', false);
+      });
+    });
+
+    $("#global_filter").on('submit', function (e) {
+      e.preventDefault();
+
+      $.ajax({
+        method: 'POST',
+        url: '/api/filter.php',
+        data: $(this).serializeArray(),
+        beforeSend: function () {
+          $("#global_filter button").prop('disabled', true);
+        }
+      }).done(function ({ status, data }) {
+        if (status == false) {
+          alert('Dogodila se greška. Nije moguće filtrirati podatke.');
+          return;
+        }
+
+        currentJSON = data;
+
+        populateTable(data);
+      }).fail(function (err) {
+        console.error(err);
+        alert('Dogodila se greška. Nije moguće filtrirati podatke.');
+      }).always(function () {
+        $("#global_filter button").prop('disabled', false);
       });
     });
   </script>
