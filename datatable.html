@@ -124,12 +124,12 @@
             <div class="row search-type-date">
               <div class="col-12 col-md-4 col-lg-3 mb-1">
                 <label for="before">Nakon:</label>
-                <input type="text" class="form-control" name="after" disabled>
+                <input type="text" class="form-control" name="after" autocomplete="off" disabled>
               </div>
 
               <div class="col-12 col-md-4 col-lg-3 mb-1">
                 <label for="after">Prije:</label>
-                <input type="text" class="form-control" name="before" disabled>
+                <input type="text" class="form-control" name="before" autocomplete="off" disabled>
               </div>
             </div>
 
@@ -178,13 +178,30 @@
       monthsShort: ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'],
       today: 'Danas',
       clear: 'Očisti',
-      dateFormat: 'dd.mm.yyyy',
+      dateFormat: 'dd.MM.yyyy',
       timeFormat: 'hh:ii',
       firstDay: 1
     };
 
-    new AirDatepicker('input[name="before"]', locale);
-    new AirDatepicker('input[name="after"]', locale);
+    var beforeDatePicker = new AirDatepicker('input[name="before"]', { locale });
+    var afterDatePicker = new AirDatepicker('input[name="after"]', { locale });
+
+    /* This datepicker implementation does not listen to input field changes when someone manually types in a date */
+    $("input[name='before']").on('change', function() {
+      var st = $(this).val();
+      var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+      var dt = new Date(st.replace(pattern,'$3-$2-$1'));
+
+      beforeDatePicker.selectDate(dt);
+    });
+    
+    $("input[name='after']").on('change', function() {
+      var st = $(this).val();
+      var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+      var dt = new Date(st.replace(pattern,'$3-$2-$1'));
+
+      afterDatePicker.selectDate(dt);
+    });
 
     /* Choosing filter */
     function handleFilterChange() {
