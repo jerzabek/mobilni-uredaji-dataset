@@ -1,3 +1,7 @@
 *.cfg
+<<<<<<< HEAD
 __pycache__
 constants.php
+=======
+__pycache__
+>>>>>>> 94d0a32b411a1e44d22548965ee14c6d9af55968
