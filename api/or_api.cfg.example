@@ -1,0 +1,10 @@
+{
+  "debug_mode":   false,
+  "ssl_enabled":  true,
+
+  "flask_host":   "127.0.0.1",
+  "flask_port":   "12345",
+
+  "certfile":     "",
+  "keyfile":      ""
+}
