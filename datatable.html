@@ -76,7 +76,7 @@
         <div class="col-12 col-md-6">
           <h4>Pretraži sva polja unutar dataseta:</h4>
 
-          <form id="global_filter" action="/api/filter.php" method="get">
+          <form id="global_filter" action="/filters/filter.php" method="get">
             <div class="row mb-4">
               <div class="col-12 col-md-10 col-lg-8 mb-2 mb-md-0">
                 <input type="text" class="form-control" name="wildcard" placeholder="Pretraži sva polja">
@@ -90,7 +90,7 @@
         <div class="col-12 col-md-6">
           <h4>Odaberi polje unutar dataseta te pretraži:</h4>
 
-          <form id="attribute_filter" action="/api/filter.php" method="get">
+          <form id="attribute_filter" action="/filters/filter.php" method="get">
             <div class="row mb-2">
               <div class="col-12 col-md-10 col-lg-8 mb-2 mb-md-0">
                 <select name="field" class="form-select" id="filter_select" onchange="handleFilterChange()">
@@ -425,7 +425,7 @@
         if (selectedFilter === 'charging_port') {
           $.ajax({
             method: 'get',
-            url: '/api/list.php?list=charging_port',
+            url: '/filters/list.php?list=charging_port',
             beforeSend: function () {
               $('.search-type-select select').prop('disabled', true);
               $('.search-type-select select').append('<option selected>Učitavanje...</option>');
@@ -446,7 +446,7 @@
         } else if (selectedFilter === 'brand' || selectedFilter === 'processor_brand') {
           $.ajax({
             method: 'get',
-            url: '/api/list.php?list=brand',
+            url: '/filters/list.php?list=brand',
             beforeSend: function () {
               $('.search-type-select select').prop('disabled', true);
               $('.search-type-select select').append('<option selected>Učitavanje...</option>');
@@ -509,7 +509,7 @@
 
       $.ajax({
         method: 'POST',
-        url: '/api/filter.php',
+        url: '/filters/filter.php',
         data: $(this).serializeArray(),
         beforeSend: function () {
           $("#attribute_filter button").prop('disabled', true);
@@ -536,7 +536,7 @@
 
       $.ajax({
         method: 'POST',
-        url: '/api/filter.php',
+        url: '/filters/filter.php',
         data: $(this).serializeArray(),
         beforeSend: function () {
           $("#global_filter button").prop('disabled', true);

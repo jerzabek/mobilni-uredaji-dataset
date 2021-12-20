@@ -1,0 +1,15 @@
+{
+  "debug_mode":   false,
+  "ssl_enabled":  true,
+
+  "db_name":      "fer_2122_or_mobilni_uredaji",
+  "db_server":    "localhost",
+  "db_username":  "root",
+  "db_password":  "",
+
+  "flask_host":   "127.0.0.1",
+  "flask_port":   "12345",
+
+  "certfile":     "",
+  "keyfile":      ""
+}
