@@ -125,6 +125,31 @@ def create_comapny():
 
     return util.build_response({"success": True, "response": created_id}), HTTPStatus.OK
 
+
+@app.route('/company/<int:company_id>', methods=['PUT'])
+def update_company(company_id):
+    if request.headers['Content-Type'] != "application/json":
+        return util.build_response({"error": "Request must have Content-Type header set to 'application/json'"}), HTTPStatus.UNSUPPORTED_MEDIA_TYPE
+
+    mandatory_fields = ("name",)
+
+    # Validation
+    if not all(field in request.json.keys() for field in mandatory_fields):
+        return util.build_response({"error": "Missing mandatory fields"}), HTTPStatus.BAD_REQUEST
+
+    if not request.json['name'] or not request.json['name'].strip():
+        return util.build_response({"error": "Field 'name' must not be empty"}), HTTPStatus.BAD_REQUEST
+
+    cursor = db.get_cursor()
+
+    company_name = request.json['name']
+
+    cursor.execute("UPDATE company SET name=%s WHERE id=%s",
+                   (company_name, company_id))
+    db.commit()
+
+    return util.build_response({"success": True}), HTTPStatus.OK
+
 # -------------------------------- Processors --------------------------------
 
 
