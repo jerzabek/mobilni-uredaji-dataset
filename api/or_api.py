@@ -32,13 +32,31 @@ if(not db.connect()):
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/phone/all', methods=['GET'])
-def hello():
+def get_all_phones():
     cursor = db.get_cursor()
 
     cursor.execute("SELECT * FROM phone;")
     data = cursor.fetchall()
     cursor.close()
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/phone/<int:phone_id>', methods=['GET'])
+def get_phone(phone_id):
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM phone WHERE id = %s;", (phone_id,))
+    data = cursor.fetchall()
+    cursor.close()
+
+    if data is None:
+        return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
+
+    if not data:
+        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
 
     return util.build_response({"success": True, "response": data}), HTTPStatus.OK
 
