@@ -3,10 +3,12 @@ import sys
 from flask import Flask, request
 from flask_cors import CORS
 from http import HTTPStatus
+import json
 
 import or_api_config as cfg
 import or_api_utils as util
 from or_api_db import OR_API_DB
+
 
 # Loading configuration, used to store constant variables and environment variables
 cfg.load_config()
@@ -42,7 +44,7 @@ def apply_caching(response):
 # -------------------------------- Phones --------------------------------
 
 
-@app.route('/phone/all', methods=['GET'])
+@app.route('/phone', methods=['GET'])
 def get_all_phones():
     cursor = db.get_cursor()
 
@@ -72,7 +74,7 @@ def get_phone(phone_id):
 # -------------------------------- Companies --------------------------------
 
 
-@app.route('/company/all', methods=['GET'])
+@app.route('/company', methods=['GET'])
 def get_all_companies():
     cursor = db.get_cursor()
 
@@ -163,7 +165,7 @@ def delete_company(company_id):
 # -------------------------------- Processors --------------------------------
 
 
-@app.route('/processor/all', methods=['GET'])
+@app.route('/processor', methods=['GET'])
 def get_all_processors():
     cursor = db.get_cursor()
 
@@ -193,7 +195,7 @@ def get_processor(processor_id):
 # -------------------------------- Cameras --------------------------------
 
 
-@app.route('/camera/all', methods=['GET'])
+@app.route('/camera', methods=['GET'])
 def get_all_cameras():
     cursor = db.get_cursor()
 
@@ -219,6 +221,14 @@ def get_camera(camera_id):
         return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
 
     return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/documentation', methods=['GET'])
+def get_openapi_documentation():
+    with open('../openapi.json', encoding='utf-8') as fh:
+        api_doc = json.load(fh)
+
+    return api_doc, HTTPStatus.OK
 
 
 @app.route('/', defaults={'path': ''})
