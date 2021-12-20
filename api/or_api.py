@@ -150,6 +150,16 @@ def update_company(company_id):
 
     return util.build_response({"success": True}), HTTPStatus.OK
 
+
+@app.route('/company/<int:company_id>', methods=['DELETE'])
+def delete_company(company_id):
+    cursor = db.get_cursor()
+    cursor.execute("DELETE FROM company WHERE id = %s", (company_id, ))
+    db.commit()
+
+    return util.build_response({"success": True}), HTTPStatus.OK
+
+
 # -------------------------------- Processors --------------------------------
 
 
