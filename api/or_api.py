@@ -1,6 +1,6 @@
 import sys
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from http import HTTPStatus
 
@@ -32,6 +32,13 @@ if(not db.connect()):
 app = Flask(__name__)
 CORS(app)
 
+
+@app.after_request
+def apply_caching(response):
+    # We set the default response Content-Type header to JSON
+    response.headers["Content-Type"] = "application/json"
+    return response
+
 # -------------------------------- Phones --------------------------------
 
 
@@ -62,7 +69,7 @@ def get_phone(phone_id):
 
     return util.build_response({"success": True, "response": data}), HTTPStatus.OK
 
-# -------------------------------- Compšanies --------------------------------
+# -------------------------------- Companies --------------------------------
 
 
 @app.route('/company/all', methods=['GET'])
@@ -91,6 +98,32 @@ def get_company(company_id):
         return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
 
     return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/company', methods=['POST'])
+def create_comapny():
+    if request.headers['Content-Type'] != "application/json":
+        return util.build_response({"error": "Request must have Content-Type header set to 'application/json'"}), HTTPStatus.UNSUPPORTED_MEDIA_TYPE
+
+    # Validation
+    if "name" not in request.json:
+        return util.build_response({"error": "Missing field 'name'"}), HTTPStatus.BAD_REQUEST
+
+    if not request.json['name'] or not request.json['name'].strip():
+        return util.build_response({"error": "Field 'name' must not be empty"}), HTTPStatus.BAD_REQUEST
+
+    cursor = db.get_cursor()
+
+    company_name = request.json['name']
+
+    cursor.execute("INSERT INTO company (name) VALUES (%s);", (company_name,))
+    db.commit()
+
+    # We return the last inserted ID in the response
+    cursor.execute('SELECT LAST_INSERT_ID() as id;')
+    created_id = cursor.fetchone()['id']
+
+    return util.build_response({"success": True, "response": created_id}), HTTPStatus.OK
 
 # -------------------------------- Processors --------------------------------
 

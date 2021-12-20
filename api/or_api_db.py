@@ -23,3 +23,6 @@ class OR_API_DB:
 
     def get_cursor(self, dictionary=True):
         return self.db_conn.cursor(dictionary=dictionary)
+
+    def commit(self):
+        self.db_conn.commit()
