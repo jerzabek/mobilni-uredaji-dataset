@@ -32,6 +32,8 @@ if(not db.connect()):
 app = Flask(__name__)
 CORS(app)
 
+# -------------------------------- Phones --------------------------------
+
 
 @app.route('/phone/all', methods=['GET'])
 def get_all_phones():
@@ -60,11 +62,101 @@ def get_phone(phone_id):
 
     return util.build_response({"success": True, "response": data}), HTTPStatus.OK
 
+# -------------------------------- Compšanies --------------------------------
 
-# Catch all route - used to match routes that do not exist
+
+@app.route('/company/all', methods=['GET'])
+def get_all_companies():
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM company;")
+    data = cursor.fetchall()
+    cursor.close()
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/company/<int:company_id>', methods=['GET'])
+def get_company(company_id):
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM company WHERE id = %s;", (company_id,))
+    data = cursor.fetchall()
+    cursor.close()
+
+    if data is None:
+        return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
+
+    if not data:
+        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+# -------------------------------- Processors --------------------------------
+
+
+@app.route('/processor/all', methods=['GET'])
+def get_all_processors():
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM processor;")
+    data = cursor.fetchall()
+    cursor.close()
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/processor/<int:processor_id>', methods=['GET'])
+def get_processor(processor_id):
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM processor WHERE id = %s;", (processor_id,))
+    data = cursor.fetchall()
+    cursor.close()
+
+    if data is None:
+        return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
+
+    if not data:
+        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+# -------------------------------- Cameras --------------------------------
+
+
+@app.route('/camera/all', methods=['GET'])
+def get_all_cameras():
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM camera;")
+    data = cursor.fetchall()
+    cursor.close()
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
+@app.route('/camera/<int:camera_id>', methods=['GET'])
+def get_camera(camera_id):
+    cursor = db.get_cursor()
+
+    cursor.execute("SELECT * FROM camera WHERE id = %s;", (camera_id,))
+    data = cursor.fetchall()
+    cursor.close()
+
+    if data is None:
+        return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
+
+    if not data:
+        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    # Catch all route - used to match routes that do not exist
     return util.build_response({"error": "This endpoint does not exist."}), HTTPStatus.BAD_REQUEST
 
 
