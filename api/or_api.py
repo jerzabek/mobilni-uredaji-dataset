@@ -48,6 +48,9 @@ def apply_caching(response):
 def get_all_phones():
     cursor = db.get_cursor()
 
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
+
     cursor.execute("SELECT * FROM phone;")
     data = cursor.fetchall()
     cursor.close()
@@ -58,6 +61,9 @@ def get_all_phones():
 @app.route('/phone/<int:phone_id>', methods=['GET'])
 def get_phone(phone_id):
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
 
     cursor.execute("SELECT * FROM phone WHERE id = %s;", (phone_id,))
     data = cursor.fetchall()
@@ -78,6 +84,9 @@ def get_phone(phone_id):
 def get_all_companies():
     cursor = db.get_cursor()
 
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
+
     cursor.execute("SELECT * FROM company;")
     data = cursor.fetchall()
     cursor.close()
@@ -88,6 +97,9 @@ def get_all_companies():
 @app.route('/company/<int:company_id>', methods=['GET'])
 def get_company(company_id):
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
 
     cursor.execute("SELECT * FROM company WHERE id = %s;", (company_id,))
     data = cursor.fetchall()
@@ -115,6 +127,9 @@ def create_comapny():
         return util.build_response({"error": "Field 'name' must not be empty"}), HTTPStatus.BAD_REQUEST
 
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
 
     company_name = request.json['name']
 
@@ -144,6 +159,9 @@ def update_company(company_id):
 
     cursor = db.get_cursor()
 
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
+
     company_name = request.json['name']
 
     cursor.execute("UPDATE company SET name=%s WHERE id=%s",
@@ -156,6 +174,9 @@ def update_company(company_id):
 @app.route('/company/<int:company_id>', methods=['DELETE'])
 def delete_company(company_id):
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
     cursor.execute("DELETE FROM company WHERE id = %s", (company_id, ))
     db.commit()
 
@@ -169,6 +190,9 @@ def delete_company(company_id):
 def get_all_processors():
     cursor = db.get_cursor()
 
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
+
     cursor.execute("SELECT * FROM processor;")
     data = cursor.fetchall()
     cursor.close()
@@ -179,6 +203,9 @@ def get_all_processors():
 @app.route('/processor/<int:processor_id>', methods=['GET'])
 def get_processor(processor_id):
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
 
     cursor.execute("SELECT * FROM processor WHERE id = %s;", (processor_id,))
     data = cursor.fetchall()
@@ -199,6 +226,9 @@ def get_processor(processor_id):
 def get_all_cameras():
     cursor = db.get_cursor()
 
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
+
     cursor.execute("SELECT * FROM camera;")
     data = cursor.fetchall()
     cursor.close()
@@ -209,6 +239,9 @@ def get_all_cameras():
 @app.route('/camera/<int:camera_id>', methods=['GET'])
 def get_camera(camera_id):
     cursor = db.get_cursor()
+
+    if cursor == False:
+        return util.build_response({"error": "Service is currently unavailable"}), HTTPStatus.SERVICE_UNAVAILABLE
 
     cursor.execute("SELECT * FROM camera WHERE id = %s;", (camera_id,))
     data = cursor.fetchall()
