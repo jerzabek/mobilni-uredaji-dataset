@@ -1,3 +1,4 @@
+<?php include 'auth0.php'; ?>
 <!DOCTYPE html>
 <html lang="en" prefix="schemaorg: https://schema.org/">
 
@@ -17,42 +18,25 @@
   <title>Mobilni uređaji dataset</title>
 
   <!-- Styles -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Uključi navigaciju">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Početna</a>
-          </li <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/datatable">Filtriraj...</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+  $current_page = HOMEPAGE;
+
+  include 'header.php';
+  ?>
   <main>
     <div class="container my-md-5 my-1">
       <h1 class="mb-4" id="skup-otvorenih-podataka-o-mobilnim-ureajima">Skup otvorenih podataka o mobilnim uređajima
       </h1>
-      <p><a href="http://creativecommons.org/licenses/by/4.0/"><img
-            src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg" alt="CC BY 4.0" /></a></p>
+      <p><a href="http://creativecommons.org/licenses/by/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg" alt="CC BY 4.0" /></a></p>
       <p>This work is licensed under a<br /><a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons
           Attribution 4.0 International License</a>.</p>
-      <p><a href="http://creativecommons.org/licenses/by/4.0/"><img
-            src="https://i.creativecommons.org/l/by/4.0/88x31.png" alt="CC BY 4.0" /></a></p>
+      <p><a href="http://creativecommons.org/licenses/by/4.0/"><img src="https://i.creativecommons.org/l/by/4.0/88x31.png" alt="CC BY 4.0" /></a></p>
       <h2 class="mb-3" id="podaci-o-skupu">Podaci o skupu:</h2>
       <p><b>Autor:</b> Ivan Jeržabek</p>
       <p><b>Verzija:</b> 1.0</p>
