@@ -72,10 +72,15 @@ def get_phone(phone_id):
     if data is None:
         return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
 
-    if not data:
-        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+    context = {
+        "name": "https://schema.org/name",
+        "release_date": "https://schema.org/Date"
+    }
 
-    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+    if not data:
+        return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.OK
 
 # -------------------------------- Companies --------------------------------
 
@@ -108,10 +113,14 @@ def get_company(company_id):
     if data is None:
         return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
 
-    if not data:
-        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+    context = {
+        "name": "https://schema.org/name"
+    }
 
-    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+    if not data:
+        return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.OK
 
 
 @app.route('/company', methods=['POST'])
@@ -214,10 +223,15 @@ def get_processor(processor_id):
     if data is None:
         return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
 
-    if not data:
-        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+    context = {
+        "brand": "https://schema.org/brand",
+        "name": "https://schema.org/name"
+    }
 
-    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+    if not data:
+        return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.OK
 
 # -------------------------------- Cameras --------------------------------
 
@@ -250,10 +264,16 @@ def get_camera(camera_id):
     if data is None:
         return util.build_response({"error": "Invalid request"}), HTTPStatus.BAD_REQUEST
 
-    if not data:
-        return util.build_response({"success": True, "response": data}), HTTPStatus.NOT_FOUND
+    context = {
+        "description": "https://schema.org/description",
+        "vertical_resolution": "https://schema.org/Integer",
+        "horizontal_resolution": "https://schema.org/Integer"
+    }
 
-    return util.build_response({"success": True, "response": data}), HTTPStatus.OK
+    if not data:
+        return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.NOT_FOUND
+
+    return util.build_response({"success": True, "response": data, "context": context}), HTTPStatus.OK
 
 
 @app.route('/documentation', methods=['GET'])
