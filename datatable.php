@@ -1,3 +1,4 @@
+<?php include 'auth0.php'; ?>
 <!DOCTYPE html>
 <html lang="en" prefix="schemaorg: https://schema.org/">
 
@@ -17,12 +18,9 @@
   <title>Filteri - Mobilni uređaji dataset</title>
 
   <!-- Styles & Scripts-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.0.1/air-datepicker.min.js"></script>
@@ -52,23 +50,11 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Uključi navigaciju">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">Početna</a>
-          </li <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/datatable">Filtriraj...</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+  $current_page = DATATABLE;
+
+  include 'header.php';
+  ?>
   <main>
     <div class="container my-md-5 my-1">
       <p>Pretražite dataset:</p>
@@ -178,10 +164,8 @@
       <div class="row">
         <div class="col-12 mb-4">
           <p>Preuzmi:
-            <button onclick="downloadObjectAsJson(currentJSON, 'fer_2122_or_mobilni_uredaji')"
-              class="btn btn-success"><i class="bi bi-cloud-arrow-down"></i> JSON</button>
-            <button onclick="downloadCSV('fer_2122_or_mobilni_uredaji')" class="btn btn-success"><i
-                class="bi bi-cloud-arrow-down"></i> CSV</button>
+            <button onclick="downloadObjectAsJson(currentJSON, 'fer_2122_or_mobilni_uredaji')" class="btn btn-success"><i class="bi bi-cloud-arrow-down"></i> JSON</button>
+            <button onclick="downloadCSV('fer_2122_or_mobilni_uredaji')" class="btn btn-success"><i class="bi bi-cloud-arrow-down"></i> CSV</button>
           </p>
         </div>
 
@@ -250,11 +234,15 @@
       firstDay: 1
     };
 
-    var beforeDatePicker = new AirDatepicker('input[name="before"]', { locale });
-    var afterDatePicker = new AirDatepicker('input[name="after"]', { locale });
+    var beforeDatePicker = new AirDatepicker('input[name="before"]', {
+      locale
+    });
+    var afterDatePicker = new AirDatepicker('input[name="after"]', {
+      locale
+    });
 
     /* This datepicker implementation does not listen to input field changes when someone manually types in a date */
-    $("input[name='before']").on('change', function () {
+    $("input[name='before']").on('change', function() {
       var st = $(this).val();
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
       var dt = new Date(st.replace(pattern, '$3-$2-$1'));
@@ -262,7 +250,7 @@
       beforeDatePicker.selectDate(dt);
     });
 
-    $("input[name='after']").on('change', function () {
+    $("input[name='after']").on('change', function() {
       var st = $(this).val();
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
       var dt = new Date(st.replace(pattern, '$3-$2-$1'));
@@ -314,7 +302,7 @@
       });
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
       // We immediatelly load up all data
       $("#attribute_filter button").trigger('click');
 
@@ -349,14 +337,14 @@
         columnDefs: [{
           targets: [-1],
           data: null,
-          render: function (data, type, row) {
+          render: function(data, type, row) {
             let cameras = data[data.length - 1];
             return "<button onclick='renderCameras(\"" + escape(JSON.stringify(cameras)) + "\")' class='btn, btn-primary btn-sm'>Detalji...</button>";
           }
         }, {
           targets: [-2],
           data: null,
-          render: function (data, type, row) {
+          render: function(data, type, row) {
             let processor = data[data.length - 2];
             return "<button onclick='renderProcessor(\"" + escape(JSON.stringify(processor)) + "\")' class='btn, btn-primary btn-sm'>Detalji...</button>";
           }
@@ -373,7 +361,7 @@
         return;
       }
 
-      $.each(data, function (i, item) {
+      $.each(data, function(i, item) {
         datatable.row.add([
           item.brand,
           item.name,
@@ -426,42 +414,48 @@
           $.ajax({
             method: 'get',
             url: '/filters/list.php?list=charging_port',
-            beforeSend: function () {
+            beforeSend: function() {
               $('.search-type-select select').prop('disabled', true);
               $('.search-type-select select').append('<option selected>Učitavanje...</option>');
             }
-          }).done(function ({ status, data }) {
+          }).done(function({
+            status,
+            data
+          }) {
             if (status == false) {
               alert('Dogodila se greška. Nije moguće filtrirati podatke.');
               return;
             }
 
             generateSelectOptions(data);
-          }).fail(function (err) {
+          }).fail(function(err) {
             console.error(err);
             alert('Dogodila se greška. Nije moguće filtrirati podatke.');
-          }).always(function () {
+          }).always(function() {
             $('.search-type-select select').prop('disabled', false);
           });
         } else if (selectedFilter === 'brand' || selectedFilter === 'processor_brand') {
           $.ajax({
             method: 'get',
             url: '/filters/list.php?list=brand',
-            beforeSend: function () {
+            beforeSend: function() {
               $('.search-type-select select').prop('disabled', true);
               $('.search-type-select select').append('<option selected>Učitavanje...</option>');
             }
-          }).done(function ({ status, data }) {
+          }).done(function({
+            status,
+            data
+          }) {
             if (status == false) {
               alert('Dogodila se greška. Nije moguće filtrirati podatke.');
               return;
             }
 
             generateSelectOptions(data);
-          }).fail(function (err) {
+          }).fail(function(err) {
             console.error(err);
             alert('Dogodila se greška. Nije moguće filtrirati podatke.');
-          }).always(function () {
+          }).always(function() {
             $('.search-type-select select').prop('disabled', false);
           });
         }
@@ -494,7 +488,10 @@
       $('.search-type-select select').empty();
       $('.search-type-select select').append('<option selected>Odaberi...</option>');
 
-      data.forEach(function ({ id, name }) {
+      data.forEach(function({
+        id,
+        name
+      }) {
         // We generate options based on the fetched data
         $('.search-type-select select')
           .append($("<option></option>")
@@ -504,17 +501,20 @@
     }
 
     // Handling the filter forms being submitted
-    $("#attribute_filter").on('submit', function (e) {
+    $("#attribute_filter").on('submit', function(e) {
       e.preventDefault();
 
       $.ajax({
         method: 'POST',
         url: '/filters/filter.php',
         data: $(this).serializeArray(),
-        beforeSend: function () {
+        beforeSend: function() {
           $("#attribute_filter button").prop('disabled', true);
         }
-      }).done(function ({ status, data }) {
+      }).done(function({
+        status,
+        data
+      }) {
         if (status == false) {
           alert('Dogodila se greška. Nije moguće filtrirati podatke.');
           return;
@@ -523,25 +523,28 @@
         currentJSON = data;
 
         populateTable(data);
-      }).fail(function (err) {
+      }).fail(function(err) {
         console.error(err);
         alert('Dogodila se greška. Nije moguće filtrirati podatke.');
-      }).always(function () {
+      }).always(function() {
         $("#attribute_filter button").prop('disabled', false);
       });
     });
 
-    $("#global_filter").on('submit', function (e) {
+    $("#global_filter").on('submit', function(e) {
       e.preventDefault();
 
       $.ajax({
         method: 'POST',
         url: '/filters/filter.php',
         data: $(this).serializeArray(),
-        beforeSend: function () {
+        beforeSend: function() {
           $("#global_filter button").prop('disabled', true);
         }
-      }).done(function ({ status, data }) {
+      }).done(function({
+        status,
+        data
+      }) {
         if (status == false) {
           alert('Dogodila se greška. Nije moguće filtrirati podatke.');
           return;
@@ -550,10 +553,10 @@
         currentJSON = data;
 
         populateTable(data);
-      }).fail(function (err) {
+      }).fail(function(err) {
         console.error(err);
         alert('Dogodila se greška. Nije moguće filtrirati podatke.');
-      }).always(function () {
+      }).always(function() {
         $("#global_filter button").prop('disabled', false);
       });
     });
@@ -574,18 +577,26 @@
       let csvData = [];
 
       currentJSON.forEach(row => {
-        let temp = { ...row };
+        let temp = {
+          ...row
+        };
 
         // Prevent key name collisions
         temp.processor.processor_name = temp.processor.name;
         temp.processor.processor_brand = temp.processor.brand;
         delete temp.processor.name;
         delete temp.processor.brand;
-        temp = { ...temp, ...temp.processor };
+        temp = {
+          ...temp,
+          ...temp.processor
+        };
         delete temp.processor;
 
         if (temp.cameras == null || temp.cameras.length == 0) {
-          temp = { ...temp, ...temp.cameras };
+          temp = {
+            ...temp,
+            ...temp.cameras
+          };
           delete temp.cameras;
 
           csvData.push({

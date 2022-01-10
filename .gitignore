@@ -1,3 +1,5 @@
 *.cfg
 __pycache__
 constants.php
+composer.lock
+vendor/

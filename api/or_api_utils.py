@@ -12,4 +12,7 @@ def build_response(parameters):
     if("error" in parameters):
         response['error'] = parameters["error"]
 
+    if("context" in parameters):
+        response['@context'] = parameters["context"]
+
     return response

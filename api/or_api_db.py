@@ -22,7 +22,14 @@ class OR_API_DB:
             return True
 
     def get_cursor(self, dictionary=True):
-        return self.db_conn.cursor(dictionary=dictionary)
+        if not self.db_conn.is_connected():
+            self.db_conn.reconnect(attempts=3)
+
+        try:
+            cursor = self.db_conn.cursor(dictionary=dictionary)
+            return cursor
+        except mysql.connector.Error as err:
+            return False
 
     def commit(self):
         self.db_conn.commit()
