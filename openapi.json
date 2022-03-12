@@ -6,7 +6,7 @@
         "license": {
             "name": "CC-BY-4.0"
         },
-        "description": "Dokumentacija API sučelja stvorenog u sklopu laboratorijskih vježbi kolegija Otvoreno računarstvo. Ovaj API nudi RESTful operacije nad skupom podataka koji opisuje mobilne uređaje"
+        "description": "Dokumentacija API sučelja stvorenog u sklopu laboratorijskih vježbi kolegija Otvoreno računarstvo na Fakultetu elektrotehnike i računarstva, akademska godina 2021./2022.. Ovaj API nudi RESTful operacije nad skupom podataka koji opisuje mobilne uređaje"
     },
     "servers": [
         {
