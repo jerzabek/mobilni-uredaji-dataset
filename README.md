@@ -20,12 +20,40 @@ This work is licensed under a
 <b>Jezik:</b> engleski
 
 ## Samostalno pokretanje
+
+### Dump podataka
 Unutar repozitorija se nalazi MySQL dump baze podataka. Pomoću nje je moguće uređivati same podatke te kasnije mijenjati skup podataka.
 
 Unutar repozitorija se također nalaze CSV i JSON datoteke koje predstavljaju trenutni sadržaj skupa podataka.
 
 Skripta `dump.php` generira CSV te JSON reprezentaciju podataka u bazi. U slučaju mijenjanja strukture baze podataka obavezna je provjera valjanosti skripte.
 
+
+### Frontend
+
+Preporuča se korištenje web servera poput NGINX, u kojem slučaju je preporučeno osigurati zabranu pristupa datotekama poput `constants.php` koje sadrže tajne podatke.
+
+Datoteku `constants.php.example` treba preimenovati `constants.php` te prilagoditi varijable unutar datoteke njihovom okruženju. Za autentifikaciju korišten je sustav Auth0 za koji je potrebno osigurati potrebne konfiguracijske ključeve i tajne vrijednosti.
+
+Sve osim mape *api* je potrebno za rad frontend sučelja.
+
+Konačno potrebno je instalirati potrebne ovisnosti naredbom:
+
+```
+composer install
+```
+
+### Backend
+
+API sustav je izgrađen u jeziku Python koristeći Flask biblioteku. Prije pokretanja bitno je preimenovati datoteku `or_api.cfg.example` u `or_api.cfg` te prilagoditi vrijednosti varijabli njihovom okruženju.
+
+Preporuča se pokretanje korištenjem Gunicorn okvira naredbom:
+
+```
+gunicorn --config gunicorn_config.py
+```
+
+API sučelje je dokumentirano OpenAPI specifikacijom, koju je moguće istražiti kroz [SwaggerUI sučelje na ovoj poveznici](https://or.jarza.cc/docs).
 ## Opis atributa u skupu
 
 ### Mobitel
