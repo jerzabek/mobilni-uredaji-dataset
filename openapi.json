@@ -1,312 +1,313 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-      "version": "3.0",
-      "title": "Otvoreno računarstvo API",
-      "license": {
-          "name": "CC-BY-4.0"
-      }
-  },
-  "servers": [
-      {
-          "description": "Local",
-          "url": "http://localhost:5005"
-      },
-      {
-          "description": "Production",
-          "url": "https://or.jarza.cc/api"
-      }
-  ],
-  "paths": {
-      "/camera": {
-          "get": {
-              "summary": "List of all cameras",
-              "operationId": "listCameras",
-              "tags": [
-                  "camera"
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfull listing of all cameras",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/properties/camera"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/camera/{id}": {
-          "get": {
-              "summary": "Describe a camera",
-              "operationId": "listCamera",
-              "tags": [
-                  "camera"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the camera to display"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully listed the camera"
-                  },
-                  "404": {
-                      "description": "Camera not found"
-                  },
-                  "400": {
-                      "description": "Could not access cameras"
-                  }
-              }
-          }
-      },
-      "/processor": {
-          "get": {
-              "summary": "List of all processors",
-              "operationId": "listProcessors",
-              "tags": [
-                  "processor"
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfull listing of all processors",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/processor/{id}": {
-          "get": {
-              "summary": "Describe a processor",
-              "operationId": "listProcessor",
-              "tags": [
-                  "processor"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the processor to display"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully listed the processor"
-                  },
-                  "404": {
-                      "description": "Processor not found"
-                  },
-                  "400": {
-                      "description": "Could not access processor"
-                  }
-              }
-          }
-      },
-      "/phone": {
-          "get": {
-              "summary": "List of all phones",
-              "operationId": "listPhones",
-              "tags": [
-                  "phone"
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfull listing of all phones",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/properties/processor"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/phone/{id}": {
-          "get": {
-              "summary": "Describe a phone",
-              "operationId": "listPhone",
-              "tags": [
-                  "phone"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the phone to display"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully listed the phone"
-                  },
-                  "404": {
-                      "description": "Phone not found"
-                  },
-                  "400": {
-                      "description": "Could not access phones"
-                  }
-              }
-          }
-      },
-      "/company": {
-          "get": {
-              "summary": "List of all companies",
-              "operationId": "listCompanies",
-              "tags": [
-                  "company"
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfull listing of all companies",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/properties/brand"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "post": {
-              "summary": "Create new company",
-              "operationId": "createCompany",
-              "tags": [
-                  "company"
-              ],
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/properties/brand"
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "415": {
-                      "description": "Request denied because the request does not have a valid Content-Type header (application/json)"
-                  },
-                  "400": {
-                      "description": "Missing mandatory fields"
-                  },
-                  "200": {
-                      "description": "Successfully created a new company",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "number",
-                                  "description": "The ID of the created company"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/copmany/{id}": {
-          "get": {
-              "summary": "Describe a company",
-              "operationId": "listCompany",
-              "tags": [
-                  "company"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the company to display"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully listed the company"
-                  },
-                  "404": {
-                      "description": "Company not found"
-                  },
-                  "400": {
-                      "description": "Could not access companies"
-                  }
-              }
-          },
-          "put": {
-              "summary": "Update an existing comapny",
-              "operationId": "updateCompany",
-              "tags": [
-                  "company"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the company to update"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully updated the company"
-                  }
-              }
-          },
-          "delete": {
-              "summary": "Delete an existing comapny",
-              "operationId": "deleteCompany",
-              "tags": [
-                  "company"
-              ],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "id",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "description": "ID of the company to delete"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successfully deleted the company"
-                  }
-              }
-          }
-      }
-  }
+    "openapi": "3.0.3",
+    "info": {
+        "version": "3.0",
+        "title": "Otvoreno računarstvo API",
+        "license": {
+            "name": "CC-BY-4.0"
+        },
+        "description": "Dokumentacija API sučelja stvorenog u sklopu laboratorijskih vježbi kolegija Otvoreno računarstvo na Fakultetu elektrotehnike i računarstva, akademska godina 2021./2022.. Ovaj API nudi RESTful operacije nad skupom podataka koji opisuje mobilne uređaje"
+    },
+    "servers": [
+        {
+            "description": "Production",
+            "url": "https://or.jarza.cc/api"
+        },
+        {
+            "description": "Local",
+            "url": "http://localhost:5005"
+        }
+    ],
+    "paths": {
+        "/camera": {
+            "get": {
+                "summary": "List of all cameras",
+                "operationId": "listCameras",
+                "tags": [
+                    "camera"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull listing of all cameras",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://or.jarza.cc/schema.json#/items/properties/cameras/items/anyOf/0"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/camera/{id}": {
+            "get": {
+                "summary": "Describe a camera",
+                "operationId": "listCamera",
+                "tags": [
+                    "camera"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the camera to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully listed the camera"
+                    },
+                    "404": {
+                        "description": "Camera not found"
+                    },
+                    "400": {
+                        "description": "Could not access cameras"
+                    }
+                }
+            }
+        },
+        "/processor": {
+            "get": {
+                "summary": "List of all processors",
+                "operationId": "listProcessors",
+                "tags": [
+                    "processor"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull listing of all processors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://or.jarza.cc/schema.json#/items/properties/processor"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/processor/{id}": {
+            "get": {
+                "summary": "Describe a processor",
+                "operationId": "listProcessor",
+                "tags": [
+                    "processor"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the processor to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully listed the processor"
+                    },
+                    "404": {
+                        "description": "Processor not found"
+                    },
+                    "400": {
+                        "description": "Could not access processor"
+                    }
+                }
+            }
+        },
+        "/phone": {
+            "get": {
+                "summary": "List of all phones",
+                "operationId": "listPhones",
+                "tags": [
+                    "phone"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull listing of all phones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://or.jarza.cc/schema.json#/items"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/phone/{id}": {
+            "get": {
+                "summary": "Describe a phone",
+                "operationId": "listPhone",
+                "tags": [
+                    "phone"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the phone to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully listed the phone"
+                    },
+                    "404": {
+                        "description": "Phone not found"
+                    },
+                    "400": {
+                        "description": "Could not access phones"
+                    }
+                }
+            }
+        },
+        "/company": {
+            "get": {
+                "summary": "List of all companies",
+                "operationId": "listCompanies",
+                "tags": [
+                    "company"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull listing of all companies",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://or.jarza.cc/schema.json#/items/properties/brand"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new company",
+                "operationId": "createCompany",
+                "tags": [
+                    "company"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://or.jarza.cc/schema.json#/items/properties/brand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "415": {
+                        "description": "Request denied because the request does not have a valid Content-Type header (application/json)"
+                    },
+                    "400": {
+                        "description": "Missing mandatory fields"
+                    },
+                    "200": {
+                        "description": "Successfully created a new company",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "number",
+                                    "description": "The ID of the created company"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/copmany/{id}": {
+            "get": {
+                "summary": "Describe a company",
+                "operationId": "listCompany",
+                "tags": [
+                    "company"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the company to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully listed the company"
+                    },
+                    "404": {
+                        "description": "Company not found"
+                    },
+                    "400": {
+                        "description": "Could not access companies"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update an existing comapny",
+                "operationId": "updateCompany",
+                "tags": [
+                    "company"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the company to update"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the company"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete an existing comapny",
+                "operationId": "deleteCompany",
+                "tags": [
+                    "company"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the company to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the company"
+                    }
+                }
+            }
+        }
+    }
 }
